@@ -1,0 +1,10 @@
+[Unit]
+Description=Todo Flask application
+
+[Service]
+WorkingDirectory=/root/todo
+ExecStart=python3 /root/todo/app.py
+Restart=always 
+
+[Install]
+WantedBy=multi-user.target
