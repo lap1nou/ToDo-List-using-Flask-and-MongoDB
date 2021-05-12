@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from flask import Flask, render_template,request,redirect,url_for # For flask implementation
 from pymongo import MongoClient # Database connector
 from bson.objectid import ObjectId # For ObjectId to work
