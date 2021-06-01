@@ -18,7 +18,7 @@ spec:
       roles:
         - name: clusterAdmin
           db: admin
-        - name: userAdminAnyDatabase
+        - name: root
           db: admin
       scramCredentialsSecretName: my-scram
   additionalMongodConfig:
@@ -33,4 +33,4 @@ metadata:
   name: my-user-password
 type: Opaque
 stringData:
-  password: <your-password-here>
+  password: "1234"
