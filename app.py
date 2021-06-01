@@ -7,7 +7,8 @@ import os
 
 mongodb_host = os.environ.get('MONGO_HOST', 'localhost')
 mongodb_port = int(os.environ.get('MONGO_PORT', '27017'))
-client = MongoClient('mongodb://todo:12345@localhost:27017')    #Configure the connection to the database
+# Source : replicaSet=<replica set name>
+client = MongoClient('mongodb://todo:12345@localhost:27017', replicaSet='rs0')    #Configure the connection to the database
 db = client.camp2016    #Select the database
 todos = db.todo #Select the collection
 
