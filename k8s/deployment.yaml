@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
@@ -21,13 +21,13 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: coolboi567/todo-flaskapp:0.1
+          image: lapinou1234/todo:latest
           env:
-           - name: APP_ENV
-             value: development
-           - name: PORT
-             value: 80
+          - name: APP_ENV
+            value: development
+          - name: PORT
+            value: "80"
           ports:
-            - containerPort: 80
-              name: http
-              protocol: TCP
+          - containerPort: 80
+            name: http
+            protocol: TCP

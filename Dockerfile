@@ -1,18 +1,11 @@
-FROM alpine:3.7
-
-MAINTAINER Prashant Shahi "coolboi567@gmail.com"
+FROM alpine:latest
 
 COPY . /app
 
 WORKDIR /app
 
-RUN apk add --no-cache bash git nginx uwsgi uwsgi-python py2-pip \
-	&& pip2 install --upgrade pip \
-	&& pip2 install -r requirements.txt \
-	&& rm -rf /var/cache/apk/*
+RUN apk add --no-cache python3 py3-pip && pip3 install -r requirements.txt
 
 EXPOSE 5000
 
-ENTRYPOINT ["python"]
-
-CMD ["app.py"]
+CMD ["python3", "./app.py"]
