@@ -2,6 +2,30 @@
 
 To-Do-List is mini-project made with Flask and MongoDB. Dockerfile is also available to make docker image and docker containers.
 
+## Introduction
+Original project : https://github.com/prashant-shahi/ToDo-List-using-Flask-and-MongoDB
+
+Files added/modified by me:
+```
+- k8s/service.yaml
+- k8s/deployment.yaml
+- Dockerfile
+- app.py
+- playbooks/*
+```
+
+The `mongodb-kubernetes-operator-master` directly come from : https://github.com/mongodb/mongodb-kubernetes-operator, all other file were made by: https://github.com/prashant-shahi/ToDo-List-using-Flask-and-MongoDB.
+
+## Directory structure
+```
+├───docs
+├───k8s -> Kubernetes webapp service and deployment file
+├───mongodb-kubernetes-operator-master -> mongodb k8s operator folder
+├───playbooks -> Ansible config and playbook file
+├───static
+└───templates
+```
+
 ## Built using :
 ```sh
 	Flask : Python Based mini-Webframework

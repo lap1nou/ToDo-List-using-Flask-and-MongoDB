@@ -1,6 +1,15 @@
 # ADVCL - Project Ansible vs K8s Operator
 
 ## Ansible - Install
+Il faut d'abord configurer l'emplacement de la clé privé AWS ainsi que le host sur lequel lancer le `playbook` Ansible dans le fichier `hosts`.
+
+Puis taper ces commandes pour lancer le `playbook`:
+```
+cd playbooks
+ansible-playbook db.yml
+```
+
+Le site devrait être accessible sur : `http://$IP_ADDRESS:5000`.
 
 ## K8s Operator - Install
 Créez le cluster:
@@ -37,3 +46,7 @@ kubectl create -f k8s/service.yaml
 ```
 
 L'image Docker se trouve à cette adresse: https://hub.docker.com/repository/docker/lapinou1234/todo
+
+Pour connaître le port il faut tpaer la commmande `kubectl get svc` et noter le port du service web, et l'adresse IP est celle du container KIND (si vous utilisez Minkube ca sera l'adresse IP du cluster).
+
+Le site devrait être accessible sur : `http://$IP_ADDRESS:$PORT_SVC`.
