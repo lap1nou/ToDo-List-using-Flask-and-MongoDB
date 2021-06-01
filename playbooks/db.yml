@@ -1,0 +1,138 @@
+- name: Configure dbserver with MongoDB
+  hosts: dbservers
+  become: True
+  tasks:
+    - name: Install MongoDB
+      apt: 
+        name: 
+          - mongodb
+          - pip
+        update_cache: yes
+    
+    - name: stop mongodb default service
+      service: 
+        name: mongodb
+        state: stopped
+
+    - name: Install the application
+      ansible.builtin.git:
+        repo: 'https://github.com/lap1nou/ToDo-List-using-Flask-and-MongoDB'
+        dest: ~/todo/
+
+    - name: Install Python dependencies
+      pip:
+        requirements: ~/todo/requirements.txt
+
+    - name: Create db directory
+      file:
+        path: '/var/lib/{{item}}'
+        state: directory
+        owner: mongodb
+        group: mongodb
+      loop:
+        - mongodb0
+        - mongodb1
+        - mongodb2
+    
+    - name: Create log directory
+      file:
+        path: '/var/log/mongodb/'
+        state: directory
+        owner: mongodb
+        group: mongodb
+  
+    - name: Copy the services file
+      copy: 
+        src: '{{item}}'
+        dest: /usr/lib/systemd/system/
+        owner: mongodb
+        group: mongodb
+      loop:
+        - files/db0/db0.service
+        - files/db1/db1.service
+        - files/db2/db2.service
+        - files/todo.service
+ 
+    - name: Copy the configs file without auth
+      copy: 
+        src: '{{item}}'
+        dest: /etc/
+        owner: mongodb
+        group: mongodb
+      loop:
+        - files/db0/db0.conf
+        - files/db1/db1.conf
+        - files/db2/db2.conf
+
+    - name: restart mongodb
+      service:
+          name: '{{item}}'
+          state: restarted
+      loop:
+        - db0
+        - db1
+        - db2
+
+    - name: Ensure replicaset rs0 exists
+      community.mongodb.mongodb_replicaset:
+        replica_set: rs0
+        members:
+        - localhost:27017
+        - localhost:27018
+        - localhost:27019
+
+    - name: Create an admin user
+      community.mongodb.mongodb_user:
+        database: admin
+        name: admin
+        password: 1234
+        replica_set: rs0
+        roles:
+          - userAdminAnyDatabase
+          - readWriteAnyDatabase
+          - root
+        state: present
+
+    - name: Create an admin user for the application DB only
+      community.mongodb.mongodb_user:
+        database: admin
+        name: todo
+        password: 12345
+        replica_set: rs0
+        roles:
+          - db: camp2016
+            role: readWrite
+        state: present
+
+    - name: Copy the keyfile
+      copy: 
+        src: files/mongodb.key
+        dest: /etc/
+        owner: mongodb
+        group: mongodb
+        mode: 0400
+
+    - name: Copy the configs file with auth
+      copy: 
+        src: '{{item}}'
+        dest: /etc/
+        owner: mongodb
+        group: mongodb
+      loop:
+        - files/db0/auth/db0.conf
+        - files/db1/auth/db1.conf
+        - files/db2/auth/db2.conf
+
+    - name: restart mongodb
+      service:
+          name: '{{item}}'
+          state: restarted
+      loop:
+        - db0
+        - db1
+        - db2
+
+    - name: start todo application
+      service: 
+        name: todo
+        state: restarted

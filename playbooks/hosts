@@ -1,0 +1,2 @@
+[dbservers]
+testserver ansible_ssh_host=34.227.24.251 ansible_user=ubuntu ansible_ssh_private_key_file=./ADVCL.pem
